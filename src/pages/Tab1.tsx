@@ -1,9 +1,23 @@
-import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar } from '@ionic/react';
+import React from 'react';
+import { IonContent, IonHeader, IonList, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
 import RepoItem from '../components/RepoItem';
 import './Tab1.css';
+import { RepositoryItem } from '../interfaces/RepositoryItem';
+import { fetchRepositories } from '../services/GithubService';
 
 
 const Tab1: React.FC = () => {
+  const [repos, setRepos] = React.useState<RepositoryItem[]>([]);
+
+  const loadRepos = async () => {
+    const reposData= await fetchRepositories();
+    setRepos(reposData);
+  }
+  useIonViewDidEnter(() => {
+    console.log('Cargando repositorios...');
+    loadRepos();
+  });
+
   return (
     <IonPage>
       <IonHeader>
@@ -18,9 +32,9 @@ const Tab1: React.FC = () => {
           </IonToolbar>
         </IonHeader>
         <IonList>
-          <RepoItem name="android-repo" imageUrl="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d7/Android_robot.svg/1745px-Android_robot.svg.png" />
-          <RepoItem name="ios-repo" imageUrl="https://www.nicepng.com/png/full/945-9459181_apple-logo-wonderful-picture-images-ios-white-logo.png" />
-          <RepoItem name="ionic-repo" imageUrl="https://cdn.iconscout.com/icon/free/png-256/free-ionic-logo-icon-sbg-download-png-2945013.png" />
+          {repos.map((repo, index) => (
+            <RepoItem key={index} repo ={repo} />
+          ))}
         </IonList>
       </IonContent>
     </IonPage>
