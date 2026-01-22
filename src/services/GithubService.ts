@@ -61,3 +61,51 @@ export const getUserInfo = async (): Promise<UserInfo | null> => {
   }
 }
 
+export const updateRepository = async (
+  owner: string,
+  repoName: string,
+  data: {
+    name?: string;
+    description?: string | null;
+    private?: boolean;
+  }
+): Promise<void> => {
+  try {
+    const response = await axios.patch(
+      `${GITHUB_API_URL}/repos/${owner}/${repoName}`,
+      data,
+      {
+        headers: {
+          Authorization: GITHUB_API_TOKEN,
+        },
+      }
+    );
+
+    console.log("Repositorio actualizado:", response.data);
+  } catch (error) {
+    console.error("Error actualizando repositorio:", error);
+    throw error;
+  }
+};
+
+export const deleteRepository = async (
+  owner: string,
+  repoName: string
+): Promise<void> => {
+  try {
+    await axios.delete(
+      `${GITHUB_API_URL}/repos/${owner}/${repoName}`,
+      {
+        headers: {
+          Authorization: GITHUB_API_TOKEN,
+        },
+      }
+    );
+
+    console.log("Repositorio eliminado");
+  } catch (error) {
+    console.error("Error eliminando repositorio:", error);
+    throw error;
+  }
+};
+
