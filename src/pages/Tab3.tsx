@@ -1,10 +1,16 @@
 import { useState } from 'react';
-import { IonContent, IonHeader, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
+import { IonButton, IonContent, IonHeader, IonIcon, IonPage, IonTitle, IonToolbar, useIonViewDidEnter } from '@ionic/react';
 import { IonCard, IonCardContent, IonCardHeader, IonCardSubtitle, IonCardTitle } from '@ionic/react';
 import { getUserInfo } from '../services/GithubService';
 import './Tab3.css';
+import AuthService from '../services/AuthService';
+import { useHistory } from 'react-router';
+import { logOutOutline } from 'ionicons/icons';
 
 const Tab3: React.FC = () => {
+  const history = useHistory();
+
+
 const [userInfo, setUserInfo] = useState({
   name: 'No se puede cargar el usuario',
   username: 'no-username',
@@ -25,6 +31,12 @@ const loadUserInfo = async () => {
 }
 
 
+const handleLogout = () => {
+  AuthService.logout();
+  history.replace('/login');
+
+}
+
   useIonViewDidEnter(() => {
     loadUserInfo();
   });
@@ -42,17 +54,20 @@ const loadUserInfo = async () => {
             <IonTitle size="large">Perfil de Usuario</IonTitle>
           </IonToolbar>
         </IonHeader>
+        <div className="card-container">
         <IonCard>
       <img alt="Jose Alejandro Recalde" src={userInfo.avatar_url} />
       <IonCardHeader>
-        <IonCardTitle>{userInfo.username}</IonCardTitle>
-        <IonCardSubtitle>jose.recalde@uisek.edu.ec</IonCardSubtitle>
+        <IonCardTitle>{userInfo.name}</IonCardTitle>
+        <IonCardSubtitle>{userInfo.username}</IonCardSubtitle>
       </IonCardHeader>
-
-      <IonCardContent>
-        Soy un estudiante de Ingeniería en Software, responsable y motivado por aprender.
-      </IonCardContent>
+      <IonCardContent>{userInfo.bio}</IonCardContent>
     </IonCard>
+    <IonButton expand="block" color="danger" onClick={handleLogout}>
+      <IonIcon slot="start" icon={logOutOutline} />
+      Cerrar Sesión
+      </IonButton>
+    </div>
       </IonContent>
     </IonPage>
   );
