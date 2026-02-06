@@ -12,7 +12,7 @@ const githubApi = axios.create({
 });
 
 githubApi.interceptors.request.use((config) => {
-  const authHeader = AuthService.getAuthHeader();
+  const authHeader = AuthService.getAuthHeaders();
   if (authHeader) {
     config.headers.Authorization = authHeader;
   }

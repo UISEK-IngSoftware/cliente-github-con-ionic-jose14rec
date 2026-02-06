@@ -25,9 +25,11 @@ import {
   deleteRepository,
   updateRepository,
 } from "../services/GithubService";
+import LoadingSpinner from "../components/LoadingSpinner";
 
 const Tab1: React.FC = () => {
   const [repos, setRepos] = React.useState<RepositoryItem[]>([]);
+  const [loading, setLoading] = React.useState(false);
 
   const [selectedRepo, setSelectedRepo] =
     React.useState<RepositoryItem | null>(null);
@@ -39,6 +41,7 @@ const Tab1: React.FC = () => {
   const loadRepos = async () => {
     const reposData = await fetchRepositories();
     setRepos(reposData);
+    setLoading(false);
   };
 
   useIonViewDidEnter(() => {
@@ -156,6 +159,7 @@ const Tab1: React.FC = () => {
             </IonButton>
           </IonContent>
         </IonModal>
+        <LoadingSpinner isOpen={loading} />
       </IonContent>
     </IonPage>
   );

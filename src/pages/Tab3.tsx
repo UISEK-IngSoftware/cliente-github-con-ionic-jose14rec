@@ -6,9 +6,12 @@ import './Tab3.css';
 import AuthService from '../services/AuthService';
 import { useHistory } from 'react-router';
 import { logOutOutline } from 'ionicons/icons';
+import LoadingSpinner from '../components/LoadingSpinner';
 
 const Tab3: React.FC = () => {
   const history = useHistory();
+  const [loading, setLoading] = useState(false);
+  
 
 
 const [userInfo, setUserInfo] = useState({
@@ -19,6 +22,7 @@ const [userInfo, setUserInfo] = useState({
 });
 
 const loadUserInfo = async () => {
+  setLoading(true);
   const response = await getUserInfo();
   if (response) {
     setUserInfo({
@@ -28,6 +32,7 @@ const loadUserInfo = async () => {
       avatar_url: response.avatarUrl,
     });
   }
+  setLoading(false);
 }
 
 
@@ -68,6 +73,7 @@ const handleLogout = () => {
       Cerrar Sesión
       </IonButton>
     </div>
+    <LoadingSpinner isOpen={loading} />
       </IonContent>
     </IonPage>
   );
